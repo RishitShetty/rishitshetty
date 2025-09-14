@@ -24,11 +24,7 @@ const Projects = () => {
     }));
   };
 
-  const projectsWithUpload = [
-    "Smart Trolley using ESP32 + AWS",
-    "Assistive Vision + Bone Conduction Audio", 
-    "Embedded Ultrasonic Humidifier"
-  ];
+  // All projects now support file uploads
 
   const projects = [
     {
@@ -214,12 +210,11 @@ const Projects = () => {
                         </Button>
                       </div>
 
-                      {/* File Upload Section for specific projects */}
-                      {projectsWithUpload.includes(project.title) && (
-                        <Collapsible
-                          open={openUploads[project.title] || false}
-                          onOpenChange={() => toggleUpload(project.title)}
-                        >
+                      {/* File Upload Section for all projects */}
+                      <Collapsible
+                        open={openUploads[project.title] || false}
+                        onOpenChange={() => toggleUpload(project.title)}
+                      >
                           <CollapsibleTrigger asChild>
                             <Button
                               variant="outline"
@@ -251,8 +246,7 @@ const Projects = () => {
                             )}
                           </CollapsibleContent>
                         </Collapsible>
-                      )}
-                    </div>
+                      </div>
                   </div>
                 </CardContent>
               </Card>
