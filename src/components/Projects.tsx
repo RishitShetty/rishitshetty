@@ -1,9 +1,35 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Github, Calendar, Zap } from 'lucide-react';
+import { FileUpload, type UploadedFile } from '@/components/ui/file-upload';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ExternalLink, Github, Calendar, Zap, Upload, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 const Projects = () => {
+  const [projectFiles, setProjectFiles] = useState<Record<string, UploadedFile[]>>({});
+  const [openUploads, setOpenUploads] = useState<Record<string, boolean>>({});
+
+  const handleFilesChange = (projectTitle: string, files: UploadedFile[]) => {
+    setProjectFiles(prev => ({
+      ...prev,
+      [projectTitle]: files
+    }));
+  };
+
+  const toggleUpload = (projectTitle: string) => {
+    setOpenUploads(prev => ({
+      ...prev,
+      [projectTitle]: !prev[projectTitle]
+    }));
+  };
+
+  const projectsWithUpload = [
+    "Smart Trolley using ESP32 + AWS",
+    "Assistive Vision + Bone Conduction Audio", 
+    "Embedded Ultrasonic Humidifier"
+  ];
+
   const projects = [
     {
       title: "Smart Trolley using ESP32 + AWS",
@@ -168,23 +194,64 @@ const Projects = () => {
                       </div>
                     </div>
 
-                    <div className="flex space-x-2 pt-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
-                      >
-                        <Github size={14} />
-                        <span>Code</span>
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
-                      >
-                        <ExternalLink size={14} />
-                        <span>Demo</span>
-                      </Button>
+                    <div className="space-y-3">
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
+                        >
+                          <Github size={14} />
+                          <span>Code</span>
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
+                        >
+                          <ExternalLink size={14} />
+                          <span>Demo</span>
+                        </Button>
+                      </div>
+
+                      {/* File Upload Section for specific projects */}
+                      {projectsWithUpload.includes(project.title) && (
+                        <Collapsible
+                          open={openUploads[project.title] || false}
+                          onOpenChange={() => toggleUpload(project.title)}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full flex items-center justify-between hover:bg-primary/10 hover:text-primary"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <Upload size={14} />
+                                <span>Upload Media & Documents</span>
+                              </div>
+                              <ChevronDown 
+                                size={14} 
+                                className={`transition-transform ${
+                                  openUploads[project.title] ? 'rotate-180' : ''
+                                }`}
+                              />
+                            </Button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="mt-3">
+                            <FileUpload
+                              onFilesChange={(files) => handleFilesChange(project.title, files)}
+                              maxFiles={10}
+                              className="text-sm"
+                            />
+                            {projectFiles[project.title]?.length > 0 && (
+                              <div className="mt-2 text-xs text-muted-foreground">
+                                {projectFiles[project.title].length} file(s) uploaded
+                              </div>
+                            )}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      )}
                     </div>
                   </div>
                 </CardContent>
