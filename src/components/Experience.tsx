@@ -8,7 +8,7 @@ const Experience = () => {
       company: "Flexli Technologies Pvt. Ltd.",
       role: "Embedded Systems Intern",
       duration: "May 2025 – Aug 2025",
-      location: "India",
+      location: "India, Bangalore",
       description: "Focused on hardware testing, firmware optimization, and advanced communication protocol improvements.",
       achievements: [
         "Optimized SPI/I2C/UART communication protocols",
@@ -25,7 +25,7 @@ const Experience = () => {
       company: "AUMA Riester Gmbh & Co. Kg",
       role: "Student Industrial Intern",
       duration: "Jun 2024 – Jul 2024",
-      location: "Germany",
+      location: "Bahrain, Saudi Arabia",
       description: "Gained hands-on experience in industrial automation and actuator systems in a global environment.",
       achievements: [
         "Simulation and configuration of customer-specific electric actuators",
