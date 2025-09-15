@@ -1,17 +1,10 @@
-import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileUpload, type UploadedFile } from '@/components/ui/file-upload';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { GraduationCap, MapPin, Calendar, FileText, Upload, ChevronDown, Download } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { GraduationCap, MapPin, Calendar, FileText, ExternalLink } from 'lucide-react';
 
 const About = () => {
-  const [resumeFiles, setResumeFiles] = useState<UploadedFile[]>([]);
-  const [openResumeUpload, setOpenResumeUpload] = useState(false);
-
-  const handleResumeChange = (files: UploadedFile[]) => {
-    setResumeFiles(files);
-  };
+  const resumeLink = "https://drive.google.com/file/d/1me2-x3xMO8vsZyMazejSj5iT9IkBAR4X/preview";
 
   return (
     <section id="about" className="py-20 bg-muted/30">
@@ -109,72 +102,46 @@ const About = () => {
               <div className="mt-8 space-y-4">
                 <h4 className="text-xl font-semibold">Resume</h4>
                 
-                {/* Display Resume if uploaded */}
-                {resumeFiles.length > 0 && (
-                  <div className="space-y-2">
-                    {resumeFiles.map((file, idx) => (
-                      <div 
-                        key={idx}
-                        className="flex items-center justify-between p-3 bg-background/50 rounded-lg border border-border/30"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="p-2 bg-primary/10 rounded">
-                            <FileText size={16} className="text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{file.file.name}</p>
-                            <p className="text-xs text-muted-foreground">{(file.file.size / 1024).toFixed(1)} KB</p>
-                          </div>
-                        </div>
+                {/* Resume Preview Card */}
+                <div className="p-3 bg-background/50 rounded-lg border border-border/30">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-primary/10 rounded">
+                        <FileText size={16} className="text-primary" />
+                      </div>
+                      <div>
+                        <p className="font-medium">Resume - Rishit Saraf</p>
+                        <p className="text-xs text-muted-foreground">Click to view full document</p>
+                      </div>
+                    </div>
+                    <Dialog>
+                      <DialogTrigger asChild>
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => {
-                            const url = URL.createObjectURL(file.file);
-                            window.open(url, '_blank');
-                          }}
-                          className="flex items-center space-x-2"
+                          className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
                         >
-                          <Download size={14} />
-                          <span>View</span>
+                          <ExternalLink size={14} />
+                          <span>View Resume</span>
                         </Button>
-                      </div>
-                    ))}
+                      </DialogTrigger>
+                      <DialogContent className="max-w-4xl max-h-[90vh]">
+                        <DialogHeader>
+                          <DialogTitle>Resume - Rishit Saraf</DialogTitle>
+                        </DialogHeader>
+                        <div className="w-full h-[75vh]">
+                          <iframe
+                            src={resumeLink}
+                            width="100%"
+                            height="100%"
+                            className="border border-border/30 rounded-lg"
+                            title="Resume"
+                          />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
-                )}
-
-                {/* Resume Upload Section */}
-                <Collapsible
-                  open={openResumeUpload}
-                  onOpenChange={setOpenResumeUpload}
-                >
-                  <CollapsibleTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center justify-between hover:bg-primary/10 hover:text-primary"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Upload size={14} />
-                        <span>Upload Resume</span>
-                      </div>
-                      <ChevronDown 
-                        size={14} 
-                        className={`transition-transform ${
-                          openResumeUpload ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-3">
-                    <FileUpload
-                      onFilesChange={handleResumeChange}
-                      maxFiles={1}
-                      acceptedTypes={['.pdf', '.doc', '.docx']}
-                      className="text-sm"
-                    />
-                  </CollapsibleContent>
-                </Collapsible>
+                </div>
               </div>
             </div>
           </div>

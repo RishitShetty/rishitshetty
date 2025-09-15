@@ -1,35 +1,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileUpload, type UploadedFile } from '@/components/ui/file-upload';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ExternalLink, Github, Calendar, Zap, Upload, ChevronDown } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ExternalLink, Github, Calendar, Zap, Info } from 'lucide-react';
 import { useState } from 'react';
 
 const Projects = () => {
-  const [projectFiles, setProjectFiles] = useState<Record<string, UploadedFile[]>>({});
-  const [openUploads, setOpenUploads] = useState<Record<string, boolean>>({});
+  const [openDialog, setOpenDialog] = useState<string | null>(null);
 
-  const handleFilesChange = (projectTitle: string, files: UploadedFile[]) => {
-    setProjectFiles(prev => ({
-      ...prev,
-      [projectTitle]: files
-    }));
+  // Project Google Drive links
+  const projectLinks: Record<string, string> = {
+    "Smart Trolley using ESP32 + AWS": "https://drive.google.com/embeddedfolderview?id=13p3NLIwFAAo92DgFK2eLSFJqOnhg6X6-#grid",
+    "Assistive Vision + Bone Conduction Audio": "https://drive.google.com/embeddedfolderview?id=1sp0R1xGy6nrjjGqkkJKF6bbz1TybGcoo#grid", 
+    "Embedded Ultrasonic Humidifier": "https://drive.google.com/embeddedfolderview?id=1BADwKLMVwNE-V7m6zT4MTEGDBNezV1jg#grid"
   };
-
-  const toggleUpload = (projectTitle: string) => {
-    setOpenUploads(prev => ({
-      ...prev,
-      [projectTitle]: !prev[projectTitle]
-    }));
-  };
-
-  // All projects now support file uploads
 
   const projects = [
     {
       title: "Smart Trolley using ESP32 + AWS",
-      year: "2024",
+      year: "2024", 
       description: "Intelligent shopping cart system with automated item detection and checkout processing.",
       achievements: [
         "95% scan accuracy for item recognition",
@@ -39,7 +28,8 @@ const Projects = () => {
       ],
       technologies: ["ESP32", "AWS IoT", "Computer Vision", "RFID", "Python"],
       status: "Completed",
-      featured: true
+      featured: true,
+      hasMedia: true
     },
     {
       title: "STM32 Bare-Metal Testing Suite",
@@ -74,12 +64,13 @@ const Projects = () => {
       description: "Accessibility device for visually impaired individuals with advanced object detection.",
       achievements: [
         "84% mAP object detection accuracy",
-        "OCR with 95% accuracy for pharmaceutical text",
+        "OCR with 95% accuracy for pharmaceutical text", 
         "Real-time audio feedback system",
         "Portable embedded design"
       ],
       technologies: ["Computer Vision", "OCR", "Audio Processing", "Machine Learning"],
-      status: "Completed"
+      status: "Completed",
+      hasMedia: true
     },
     {
       title: "Autonomous Drone for Warehouse Logistics",
@@ -95,17 +86,18 @@ const Projects = () => {
       status: "Completed"
     },
     {
-      title: "Embedded Ultrasonic Humidifier",
+      title: "Embedded Ultrasonic Humidifier", 
       year: "2025",
       description: "Custom PCB design with bare-metal firmware for smart humidifier control.",
       achievements: [
         "Custom PCB design and assembly",
-        "Bare-metal ATmega firmware",
+        "Bare-metal ATmega firmware", 
         "Ultrasonic transducer control",
         "Smart environmental monitoring"
       ],
       technologies: ["ATmega", "PCB Design", "Bare-metal", "Sensors"],
-      status: "Completed"
+      status: "Completed",
+      hasMedia: true
     }
   ];
 
@@ -190,89 +182,35 @@ const Projects = () => {
                       </div>
                     </div>
 
-                    <div className="space-y-3">
-                      {/* Project Files Display */}
-                      {projectFiles[project.title]?.length > 0 && (
-                        <div>
-                          <h4 className="font-medium mb-2">Project Files</h4>
-                          <div className="space-y-2">
-                            {projectFiles[project.title].map((file, idx) => (
-                              <div 
-                                key={idx}
-                                className="flex items-center justify-between p-2 bg-background/50 rounded-lg border border-border/30"
-                              >
-                                <div className="flex items-center space-x-2">
-                                  <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
-                                    {file.preview && file.file.type.startsWith('image/') ? (
-                                      <img 
-                                        src={file.preview} 
-                                        alt={file.file.name}
-                                        className="w-6 h-6 object-cover rounded"
-                                      />
-                                    ) : (
-                                      <ExternalLink size={12} className="text-primary" />
-                                    )}
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium truncate max-w-32">{file.file.name}</p>
-                                    <p className="text-xs text-muted-foreground">{(file.file.size / 1024).toFixed(1)} KB</p>
-                                  </div>
-                                </div>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => {
-                                    if (file.preview) {
-                                      window.open(file.preview, '_blank');
-                                    }
-                                  }}
-                                  className="text-xs"
-                                >
-                                  View
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* File Upload Section - Only visible in edit mode */}
-                      <Collapsible
-                        open={openUploads[project.title] || false}
-                        onOpenChange={() => toggleUpload(project.title)}
-                      >
-                          <CollapsibleTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full flex items-center justify-between hover:bg-primary/10 hover:text-primary"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <Upload size={14} />
-                                <span>Upload Media & Documents</span>
-                              </div>
-                              <ChevronDown 
-                                size={14} 
-                                className={`transition-transform ${
-                                  openUploads[project.title] ? 'rotate-180' : ''
-                                }`}
-                              />
-                            </Button>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent className="mt-3">
-                            <FileUpload
-                              onFilesChange={(files) => handleFilesChange(project.title, files)}
-                              maxFiles={10}
-                              className="text-sm"
+                    {/* Project Media Button */}
+                    {project.hasMedia && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full flex items-center justify-center space-x-2 hover:bg-primary/10 hover:text-primary"
+                          >
+                            <Info size={14} />
+                            <span>Click for more Info</span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-4xl max-h-[80vh]">
+                          <DialogHeader>
+                            <DialogTitle>{project.title} - Media & Documents</DialogTitle>
+                          </DialogHeader>
+                          <div className="w-full h-[60vh]">
+                            <iframe
+                              src={projectLinks[project.title]}
+                              width="100%"
+                              height="100%"
+                              className="border border-border/30 rounded-lg"
+                              title={`${project.title} Media`}
                             />
-                            {projectFiles[project.title]?.length > 0 && (
-                              <div className="mt-2 text-xs text-muted-foreground">
-                                {projectFiles[project.title].length} file(s) uploaded
-                              </div>
-                            )}
-                          </CollapsibleContent>
-                        </Collapsible>
-                      </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    )}
                   </div>
                 </CardContent>
               </Card>
