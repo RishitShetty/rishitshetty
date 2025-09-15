@@ -191,26 +191,52 @@ const Projects = () => {
                     </div>
 
                     <div className="space-y-3">
-                      <div className="flex space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
-                        >
-                          <Github size={14} />
-                          <span>Code</span>
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="flex items-center space-x-2 hover:bg-primary/10 hover:text-primary"
-                        >
-                          <ExternalLink size={14} />
-                          <span>Demo</span>
-                        </Button>
-                      </div>
+                      {/* Project Files Display */}
+                      {projectFiles[project.title]?.length > 0 && (
+                        <div>
+                          <h4 className="font-medium mb-2">Project Files</h4>
+                          <div className="space-y-2">
+                            {projectFiles[project.title].map((file, idx) => (
+                              <div 
+                                key={idx}
+                                className="flex items-center justify-between p-2 bg-background/50 rounded-lg border border-border/30"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
+                                    {file.preview && file.file.type.startsWith('image/') ? (
+                                      <img 
+                                        src={file.preview} 
+                                        alt={file.file.name}
+                                        className="w-6 h-6 object-cover rounded"
+                                      />
+                                    ) : (
+                                      <ExternalLink size={12} className="text-primary" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium truncate max-w-32">{file.file.name}</p>
+                                    <p className="text-xs text-muted-foreground">{(file.file.size / 1024).toFixed(1)} KB</p>
+                                  </div>
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => {
+                                    if (file.preview) {
+                                      window.open(file.preview, '_blank');
+                                    }
+                                  }}
+                                  className="text-xs"
+                                >
+                                  View
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                      {/* File Upload Section for all projects */}
+                      {/* File Upload Section - Only visible in edit mode */}
                       <Collapsible
                         open={openUploads[project.title] || false}
                         onOpenChange={() => toggleUpload(project.title)}
