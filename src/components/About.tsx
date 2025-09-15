@@ -1,7 +1,18 @@
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, MapPin, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FileUpload, type UploadedFile } from '@/components/ui/file-upload';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { GraduationCap, MapPin, Calendar, FileText, Upload, ChevronDown, Download } from 'lucide-react';
 
 const About = () => {
+  const [resumeFiles, setResumeFiles] = useState<UploadedFile[]>([]);
+  const [openResumeUpload, setOpenResumeUpload] = useState(false);
+
+  const handleResumeChange = (files: UploadedFile[]) => {
+    setResumeFiles(files);
+  };
+
   return (
     <section id="about" className="py-20 bg-muted/30">
       <div className="container mx-auto px-6">
@@ -92,6 +103,78 @@ const About = () => {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Resume Section */}
+              <div className="mt-8 space-y-4">
+                <h4 className="text-xl font-semibold">Resume</h4>
+                
+                {/* Display Resume if uploaded */}
+                {resumeFiles.length > 0 && (
+                  <div className="space-y-2">
+                    {resumeFiles.map((file, idx) => (
+                      <div 
+                        key={idx}
+                        className="flex items-center justify-between p-3 bg-background/50 rounded-lg border border-border/30"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-primary/10 rounded">
+                            <FileText size={16} className="text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">{file.file.name}</p>
+                            <p className="text-xs text-muted-foreground">{(file.file.size / 1024).toFixed(1)} KB</p>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            const url = URL.createObjectURL(file.file);
+                            window.open(url, '_blank');
+                          }}
+                          className="flex items-center space-x-2"
+                        >
+                          <Download size={14} />
+                          <span>View</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Resume Upload Section */}
+                <Collapsible
+                  open={openResumeUpload}
+                  onOpenChange={setOpenResumeUpload}
+                >
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-between hover:bg-primary/10 hover:text-primary"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <Upload size={14} />
+                        <span>Upload Resume</span>
+                      </div>
+                      <ChevronDown 
+                        size={14} 
+                        className={`transition-transform ${
+                          openResumeUpload ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-3">
+                    <FileUpload
+                      onFilesChange={handleResumeChange}
+                      maxFiles={1}
+                      acceptedTypes={['.pdf', '.doc', '.docx']}
+                      className="text-sm"
+                    />
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             </div>
           </div>
