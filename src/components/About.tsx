@@ -127,7 +127,7 @@ const About = () => {
                       </DialogTrigger>
                       <DialogContent className="max-w-4xl max-h-[90vh]">
                         <DialogHeader>
-                          <DialogTitle>Resume - Rishit Saraf</DialogTitle>
+                          <DialogTitle>Resume - Rishit Shetty</DialogTitle>
                         </DialogHeader>
                         <div className="w-full h-[75vh]">
                           <iframe
