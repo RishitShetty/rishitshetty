@@ -51,8 +51,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
       acc[type] = [];
       return acc;
     }, {} as Record<string, string[]>),
-    maxFiles: maxFiles - files.length
-  });
+    maxFiles: maxFiles - files.length,
+    multiple: maxFiles > 1
+  } as any);
 
   const getFileIcon = (fileType: string) => {
     if (fileType.startsWith('image/')) return <Image size={16} />;
