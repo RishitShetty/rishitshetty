@@ -247,16 +247,6 @@ const Projects = () => {
             ))}
           </div>
 
-          {/* View More Projects CTA */}
-          <div className="text-center mt-12 animate-fadeInUp">
-            <Button 
-              variant="outline"
-              className="px-8 py-4 text-lg border-primary/30 hover:bg-primary/10 hover:text-primary hover-glow"
-            >
-              <Github className="mr-2" size={20} />
-              View All Projects on GitHub
-            </Button>
-          </div>
         </div>
       </div>
     </section>
