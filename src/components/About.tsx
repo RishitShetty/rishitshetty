@@ -110,7 +110,7 @@ const About = () => {
                         <FileText size={16} className="text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium">Resume - Rishit Saraf</p>
+                        <p className="font-medium">Resume - Rishit Shetty</p>
                         <p className="text-xs text-muted-foreground">Click to view full document</p>
                       </div>
                     </div>

@@ -32,6 +32,22 @@ const Projects = () => {
       hasMedia: true
     },
     {
+      title: "Real-Time Deterministic Sensor Fusion and Control System using ESP32 FreeRTOS",
+      year: "2025",
+      description: "Implements 1kHz fused-sensor sampling, 100Hz sensor fusion, and 1kHz PID control loop with RTOS queues, mutexes, and priority inversion",
+      achievements: [
+        "Dual-sensor sampling achieves 1kHz, 400Hz rates",
+        "Average jitter maintained under 25 microseconds",
+        "Sensor fusion operates consistently at 100Hz",
+        "PID control loop sustains 1kHz frequency",
+        "Zero missed deadlines across 10,000+ samples"
+      ],
+      technologies: ["ESP-IDF", "FreeRTOS", "ESP32", "C"],
+      status: "Completed",
+      featured: true,
+      githubLink: "https://github.com/RishitShetty/RTOS-Sensor-Fusion"
+    },
+    {
       title: "STM32 Bare-Metal Testing Suite",
       year: "2025",
       description: "Comprehensive testing framework for STM32 microcontrollers at register level.",
@@ -42,7 +58,8 @@ const Projects = () => {
         "Performance benchmarking tools"
       ],
       technologies: ["STM32", "Embedded C", "Assembly", "Unit Testing"],
-      status: "Completed"
+      status: "Completed",
+      githubLink: "https://github.com/RishitShetty/STM32F4-Bare-Metal-Hardware-Validation-Suite"
     },
     {
       title: "AMR with Neural-Enhanced Navigation",
@@ -182,35 +199,48 @@ const Projects = () => {
                       </div>
                     </div>
 
-                    {/* Project Media Button */}
-                    {project.hasMedia && (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="w-full flex items-center justify-center space-x-2 hover:bg-primary/10 hover:text-primary"
-                          >
-                            <Info size={14} />
-                            <span>Click for more Info</span>
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-4xl max-h-[80vh]">
-                          <DialogHeader>
-                            <DialogTitle>{project.title} - Media & Documents</DialogTitle>
-                          </DialogHeader>
-                          <div className="w-full h-[60vh]">
-                            <iframe
-                              src={projectLinks[project.title]}
-                              width="100%"
-                              height="100%"
-                              className="border border-border/30 rounded-lg"
-                              title={`${project.title} Media`}
-                            />
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    )}
+                    {/* GitHub and Media Buttons */}
+                    <div className="flex gap-2">
+                      {project.githubLink && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 flex items-center justify-center space-x-2 hover:bg-primary/10 hover:text-primary"
+                          onClick={() => window.open(project.githubLink, '_blank')}
+                        >
+                          <Github size={14} />
+                          <span>GitHub</span>
+                        </Button>
+                      )}
+                      {project.hasMedia && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className={`${project.githubLink ? 'flex-1' : 'w-full'} flex items-center justify-center space-x-2 hover:bg-primary/10 hover:text-primary`}
+                            >
+                              <Info size={14} />
+                              <span>More Info</span>
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl max-h-[80vh]">
+                            <DialogHeader>
+                              <DialogTitle>{project.title} - Media & Documents</DialogTitle>
+                            </DialogHeader>
+                            <div className="w-full h-[60vh]">
+                              <iframe
+                                src={projectLinks[project.title]}
+                                width="100%"
+                                height="100%"
+                                className="border border-border/30 rounded-lg"
+                                title={`${project.title} Media`}
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
